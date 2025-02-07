@@ -1,51 +1,53 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Heart } from "lucide-react";
-import FreeCards from "../components/FreeCards";
-import BasicCard from "../components/BasicCard";
+import FreeCards from "../components/SimpleCard";
+import BasicCard from "../components/ElegantCard";
 import PremiumCard from "../components/PremiumCard";
+import { cardType, useFormData } from "../store/useFormData";
+import { useRouter } from "next/navigation";
 
 interface CardOption {
   title: string;
   icon: React.ReactNode;
-  type: "free" | "basic" | "premium";
+  type: cardType;
   demoCards: React.ReactNode;
 }
 
 export default function SelectCardDesign() {
-  const [selectedCard, setSelectedCard] = useState<string | null>(null);
+  const router = useRouter();
 
   const cardOptions: CardOption[] = [
     {
       title: "Simple Love",
       icon: <Heart className="w-6 h-6" />,
-      type: "free",
-      demoCards: <FreeCards className="h-[450px] w-[300px]" />
+      type: "simple",
+      demoCards: <FreeCards className="h-[450px] w-[300px]" imageUrl="https://i.ibb.co/gWx39fC/3.jpg" description="You are the reason my world feels so beautiful. ❤️" />
     },
     {
       title: "Elegant Memories",
       icon: <Heart className="w-6 h-6" />,
-      type: "basic",
-      demoCards: <BasicCard className="h-[450px] w-[300px]" />
+      type: "elegant",
+      demoCards: <BasicCard className="h-[450px] w-[300px]" imageUrl="https://i.ibb.co/gWx39fC/3.jpg" description="You are the reason my world feels so beautiful. ❤️" />
     },
     {
       title: "Premium Moments",
       icon: <Heart className="w-6 h-6" />,
       type: "premium",
-      demoCards: <PremiumCard className="w-[300px]" />
+      demoCards: <PremiumCard className="w-[300px]" imageUrl="https://i.ibb.co/gWx39fC/3.jpg" description="You are the reason my world feels so beautiful. ❤️" />
     }
   ];
-
+  const cardsType = useFormData(state => state.cardsType);
+  const setCardsType = useFormData(state => state.setCardsType);
   const handleContinue = () => {
-    if (!selectedCard) return;
-    window.location.href = "/proposal/preview";
+    if (!cardsType) return;
+    router.push('/create-page');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-red-100 dark:from-pink-950 dark:to-red-900 py-12 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-red-100 dark:from-pink-950 dark:to-red-900 py-12 overflow-hidden relative">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
@@ -62,11 +64,11 @@ export default function SelectCardDesign() {
             {cardOptions.map((option) => (
               <Card
                 key={option.type}
-                className={`p-6 relative cursor-pointer transform transition-all duration-300 hover:scale-[1.01] ${selectedCard === option.type
+                className={`p-6 relative cursor-pointer transform transition-all duration-300 hover:scale-[1.01] ${cardsType === option.type
                   ? "ring-2 ring-red-500 dark:ring-red-400"
                   : ""
                   }`}
-                onClick={() => setSelectedCard(option.type)}
+                onClick={() => setCardsType(option.type)}
               >
                 <div className="text-center">
                   <div className="mb-10 h-[500px]">
@@ -79,17 +81,19 @@ export default function SelectCardDesign() {
             ))}
           </div>
 
-          <div className="mt-10 text-center">
-            <Button
-              size="lg"
-              className={`bg-red-600 hover:bg-red-700 text-white px-8 ${!selectedCard ? "opacity-50 cursor-not-allowed" : ""}`}
-              onClick={handleContinue}
-              disabled={!selectedCard}
-            >
-              <Heart className="mr-2 h-5 w-5" />
-              Continue
-            </Button>
-          </div>
+          {/* Floating button section */}
+          {cardsType && (
+            <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-full max-w-xs">
+              <Button
+                size="lg"
+                className="bg-red-600 hover:bg-red-700 text-white w-full"
+                onClick={handleContinue}
+              >
+                <Heart className="mr-2 h-5 w-5" />
+                Continue
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>
