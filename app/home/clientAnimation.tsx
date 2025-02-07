@@ -95,7 +95,7 @@ export function AnimatedContent() {
                 transition={{ delay: 0.6 }}
                 className="mt-12"
             >
-                <Link href="/create">
+                <Link href="/select-card">
                     <Button
                         size="lg"
                         className="group bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-10 py-7 text-lg rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl"
