@@ -7,6 +7,7 @@ import { Navigation } from './components/Navigation/index';
 import { dark } from "@clerk/themes";
 
 
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -26,7 +27,6 @@ export default function RootLayout({
       }}
     >
       <html lang="en" suppressHydrationWarning>
-
         <body className={inter.className}>
           <main className="min-h-screen bg-gradient-to-b from-pink-50 via-red-50 to-pink-100 dark:from-pink-950 dark:via-red-900 dark:to-pink-900 relative overflow-hidden">
             <ThemeProvider
