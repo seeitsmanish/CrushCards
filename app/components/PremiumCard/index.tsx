@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dancing_Script } from 'next/font/google';
 import { Heart, Sparkles, Stars } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const dancingScript = Dancing_Script({
     subsets: ['latin'],
@@ -18,8 +19,8 @@ interface PremiumCardPropsType {
 }
 
 const PremiumCard = ({
-    imageUrl = 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?q=80&w=2788&auto=format&fit=crop',
-    description = 'Every moment with you feels like a beautiful dream come true.',
+    imageUrl,
+    description,
     className = '',
     badge = false,
 }: PremiumCardPropsType) => {
@@ -28,7 +29,7 @@ const PremiumCard = ({
     return (
         <div className={`perspective-1000 ${className}`}>
             <motion.div
-                className="relative rounded-xl bg-gradient-to-br from-pink-50 to-red-50 shadow-lg h-full w-full p-6 border border-pink-200 overflow-hidden"
+                className="relative rounded-xl bg-gradient-to-br from-pink-50 to-red-50 shadow-lg h-full w-full p-6 border border-pink-800 overflow-hidden"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
@@ -44,8 +45,8 @@ const PremiumCard = ({
                             initial={{
                                 opacity: 0.2,
                                 scale: Math.random() * 0.5 + 0.5,
-                                x: Math.random() * window.innerWidth,
-                                y: Math.random() * window.innerHeight,
+                                x: Math.random(),
+                                y: Math.random()
                             }}
                             animate={{
                                 opacity: [0.2, 0.5, 0.2],
@@ -136,64 +137,122 @@ const PremiumCard = ({
 
 
                 {/* Main image with decorative frame */}
-                <div className="relative bg-white p-4 rounded-lg shadow-lg transform rotate-[-2deg] border-4 border-pink-100">
+                {
+                    imageUrl && (
+                        <div className="relative bg-white p-4 rounded-lg shadow-lg transform rotate-[-2deg] border-4 border-pink-100">
 
 
-                    <div className="absolute inset-0 bg-gradient-to-r from-pink-100 via-white to-pink-100 opacity-50" />
-                    <motion.div
-                        className="relative overflow-hidden rounded-lg"
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <motion.img
-                            src={imageUrl}
-                            alt="Valentine's Memory"
-                            className="w-full object-cover h-[300px] rounded-lg"
-                            initial={{ scale: 1.1 }}
-                            animate={{ scale: 1 }}
-                            transition={{ duration: 0.5 }}
-                        />
-                        <motion.div
-                            className="absolute inset-0 bg-gradient-to-t from-pink-500/30 to-transparent"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.5 }}
-                        />
-                        {/* Decorative corners */}
-                        {[...Array(4)].map((_, i) => (
-                            <div
-                                key={`corner-${i}`}
-                                className={`absolute w-6 h-6 border-2 border-pink-300 ${i === 0 ? 'top-2 left-2 rounded-tl-lg' :
-                                    i === 1 ? 'top-2 right-2 rounded-tr-lg' :
-                                        i === 2 ? 'bottom-2 left-2 rounded-bl-lg' :
-                                            'bottom-2 right-2 rounded-br-lg'
-                                    }`}
-                            />
-                        ))}
-                    </motion.div>
-                </div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-pink-100 via-white to-pink-100 opacity-50" />
+                            <motion.div
+                                className="relative overflow-hidden rounded-lg"
+                                whileHover={{ scale: 1.02 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <motion.img
+                                    src={imageUrl}
+                                    alt="Valentine's Memory"
+                                    className="w-full object-cover h-[300px] rounded-lg"
+                                    initial={{ scale: 1.1 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ duration: 0.5 }}
+                                />
+                                <motion.div
+                                    className="absolute inset-0 bg-gradient-to-t from-pink-500/30 to-transparent"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5 }}
+                                />
+                                {/* Decorative corners */}
+                                {[...Array(4)].map((_, i) => (
+                                    <div
+                                        key={`corner-${i}`}
+                                        className={`absolute w-6 h-6 border-2 border-pink-300 ${i === 0 ? 'top-2 left-2 rounded-tl-lg' :
+                                            i === 1 ? 'top-2 right-2 rounded-tr-lg' :
+                                                i === 2 ? 'bottom-2 left-2 rounded-bl-lg' :
+                                                    'bottom-2 right-2 rounded-br-lg'
+                                            }`}
+                                    />
+                                ))}
+                            </motion.div>
+                        </div>
+                    )
+                }
 
 
                 {/* Message with decorative elements */}
-                <motion.div
-                    className="mt-8 relative px-6"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                >
-                    <div className="absolute left-0 top-0 w-4 h-4 border-l-2 border-t-2 border-pink-300" />
-                    <div className="absolute right-0 top-0 w-4 h-4 border-r-2 border-t-2 border-pink-300" />
-                    <div className="absolute left-0 bottom-0 w-4 h-4 border-l-2 border-b-2 border-pink-300" />
-                    <div className="absolute right-0 bottom-0 w-4 h-4 border-r-2 border-b-2 border-pink-300" />
+                {
+                    description && (
+                        <motion.div
+                            className={cn(" relative px-6", imageUrl && "mt-8")}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            <div className="absolute left-0 top-0 w-4 h-4 border-l-2 border-t-2 border-pink-300" />
+                            <div className="absolute right-0 top-0 w-4 h-4 border-r-2 border-t-2 border-pink-300" />
+                            <div className="absolute left-0 bottom-0 w-4 h-4 border-l-2 border-b-2 border-pink-300" />
+                            <div className="absolute right-0 bottom-0 w-4 h-4 border-r-2 border-b-2 border-pink-300" />
 
-                    <p className={`${dancingScript.className} text-center text-xl text-pink-700 leading-relaxed`}>
-                        {description}
-                    </p>
+                            <p className={`${dancingScript.className} text-center text-xl text-pink-700 leading-relaxed`}>
+                                {description}
+                            </p>
 
-                </motion.div>
+                        </motion.div>
+                    )
+                }
+
             </motion.div>
         </div>
     );
 };
 
 export default PremiumCard;
+
+
+// background with a lot of small pink hearts
+interface FloatingHeartProps {
+    delay: number;
+}
+
+function FloatingHeart({ delay }: FloatingHeartProps) {
+    return (
+        <div
+            className="absolute animate-float"
+            style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${delay}s`,
+                opacity: 0.6
+            }}
+        >
+            <Heart
+                className="text-pink-400/40 dark:text-pink-600/40"
+                size={Math.random() * 20 + 10}
+            />
+        </div>
+    );
+}
+
+interface ValentinesBackgroundProps {
+    numberOfHearts?: number;
+}
+
+export function PremiumBackground({
+    numberOfHearts = 50
+}: ValentinesBackgroundProps) {
+    const [hearts, setHearts] = useState<number[]>([]);
+
+    useEffect(() => {
+        setHearts(Array.from({ length: numberOfHearts }, (_, i) => i));
+    }, [numberOfHearts]);
+
+    return (
+        <div className="fixed inset-0 overflow-hidden z-1">
+            <div className="absolute inset-0 bg-gradient-to-br from-pink-100 via-red-50 to-pink-100 dark:from-pink-950 dark:via-red-900 dark:to-pink-950" />
+
+            {/* Floating Hearts */}
+            {hearts.map((_, i) => (
+                <FloatingHeart key={i} delay={Math.random() * 10} />
+            ))}
+        </div>
+    );
+}

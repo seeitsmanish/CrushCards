@@ -1,51 +1,33 @@
 'use client';
 
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Sparkles, Star, Crown, MessageCircleHeart } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Heart } from 'lucide-react';
 
-export type BasicCardPropsType = {
+export type ElegantCardPropsType = {
     description?: string;
     imageUrl?: string;
     className?: string;
     badge?: boolean;
 }
 
-const BasicCard = ({
-    description = 'In the depths of my heart, you are my eternal starlight',
-    imageUrl = 'https://photosnow.org/wp-content/uploads/2024/04/cute-girl-pic_11.jpg',
+const ElegantCard = ({
+    description,
+    imageUrl,
     className,
     badge = false
-}: BasicCardPropsType) => {
+}: ElegantCardPropsType) => {
     // Particles for the background effect
     const particles = Array(20).fill(null);
     const orbs = Array(3).fill(null);
 
     return (
         <div className={className}>
-            <motion.div
-                className="relative"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-            >
-                {/* Ambient Background Glow */}
-                <motion.div
-                    className="absolute -inset-4 bg-gradient-to-r from-violet-600/30 via-fuchsia-500/30 to-indigo-600/30 rounded-3xl opacity-75 blur-2xl"
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.3, 0.6, 0.3],
-                    }}
-                    transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                    }}
-                />
+            <motion.div>
 
                 {/* Main Card Container */}
                 <motion.div
-                    className="relative backdrop-blur-xl bg-black/30 rounded-3xl overflow-hidden border border-white/10"
+                    className="relative backdrop-blur-xl bg-slate-900/30 rounded-3xl overflow-hidden border border-white/10"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.4 }}
                 >
@@ -108,30 +90,35 @@ const BasicCard = ({
                         ))}
 
                         {/* Image Container */}
-                        <motion.div
-                            className="relative mb-6"
-                            initial={{ scale: 0.5, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                        >
-                            <div className="relative">
-                                {/* Image */}
-                                <div className="relative rounded-xl overflow-hidden">
-                                    <img
-                                        src={imageUrl}
-                                        alt="Love"
-                                        className="w-full h-[300px] object-cover"
-                                    />
-                                    {/* Image Overlay */}
-                                    <motion.div
-                                        className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ delay: 0.5 }}
-                                    />
-                                </div>
-                            </div>
-                        </motion.div>
+                        {
+                            imageUrl && (
+                                <motion.div
+                                    className="relative mb-6"
+                                    initial={{ scale: 0.5, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ delay: 0.3 }}
+                                >
+                                    <div className="relative">
+                                        {/* Image */}
+                                        <div className="relative rounded-xl overflow-hidden">
+                                            <img
+                                                src={imageUrl}
+                                                alt="Love"
+                                                className="w-full h-[300px] object-cover"
+                                            />
+                                            {/* Image Overlay */}
+                                            <motion.div
+                                                className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ delay: 0.5 }}
+                                            />
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )
+                        }
+
 
                         {/* Message */}
                         <motion.div
@@ -183,4 +170,13 @@ const BasicCard = ({
     );
 };
 
-export default BasicCard;
+export default ElegantCard;
+
+
+export const ElegantBackground = () => {
+    return (
+        <div className="fixed inset-0 w-full dark:bg-black bg-white  dark:bg-grid-white/[0.2] bg-grid-black/[0.2] flex items-center justify-center">
+            <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+        </div>
+    );
+};

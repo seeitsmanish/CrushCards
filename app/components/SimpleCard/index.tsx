@@ -4,18 +4,18 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Heart, Sparkles } from 'lucide-react';
 
-export type FreeCardsPropsType = {
+export type SimpleCardPropsType = {
     description?: string;
     imageUrl?: string;
     className?: string;
     badge?: boolean;
 }
-const FreeCards = ({
+const SimpleCard = ({
     description = 'Every beat of my heart belongs to you my love',
     imageUrl = 'https://photosnow.org/wp-content/uploads/2024/04/cute-girl-pic_11.jpg',
     className,
     badge = false
-}: FreeCardsPropsType) => {
+}: SimpleCardPropsType) => {
 
     const floatingHearts = Array(5).fill(null);
 
@@ -167,4 +167,10 @@ const FreeCards = ({
     )
 }
 
-export default FreeCards;
+export default SimpleCard;
+
+export const SimpleBackground = () => {
+    return (
+        <div className="fixed w-full h-full bg-gradient-to-r from-blue-500 to-purple-500" />
+    )
+}
