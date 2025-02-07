@@ -14,23 +14,36 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  imageUrl  String? // Profile picture
-  provider  String // "google" or "facebook"
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  pages     Page[] // Relation to pages
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  provider Provider
+  pages    Page[]
+}
+
+enum Provider {
+  GOOGLE
+  FACEBOOK
 }
 
 model Page {
-  id        String   @id @default(uuid())
-  slug      String   @unique
-  title     String
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  cards     Json     @default("[]") // Stores an array of { imageUrl, description }
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(uuid())
+  title      String
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  cards      Json
+  uniqueSlug String   @unique
+  cardTypeId String
+  cardType   CardType @relation(fields: [cardTypeId], references: [id])
+  views      Int      @default(0)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
 }
+
+model CardType {
+  id   String @id @default(uuid())
+  name String @unique
+  Page Page[]
+}
+
+// Seed Data:
+// Simple, Elegant, Premium
