@@ -4,9 +4,16 @@ import Link from 'next/link';
 import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
 import { Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { usePathname } from 'next/navigation';
 
 export function Navigation() {
     const { isSignedIn } = useUser();
+    const pathname = usePathname()
+    const isProposalPage = pathname.startsWith('/proposal')
+
+    if (isProposalPage) {
+        return null;
+    }
 
     return (
         <nav className="bg-background/50 backdrop-blur-sm border-b border-pink-500/20 relative w-full z-50">
