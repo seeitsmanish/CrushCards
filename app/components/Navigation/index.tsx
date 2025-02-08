@@ -1,15 +1,15 @@
-'use client';
-import React from 'react';
-import Link from 'next/link';
-import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
-import { Heart } from 'lucide-react';
+import React from "react";
+import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
+import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { usePathname } from 'next/navigation';
+import { headers } from "next/headers";
+import { SignInButton, UserButton } from "@clerk/nextjs";
 
-export function Navigation() {
-    const { isSignedIn } = useUser();
-    const pathname = usePathname()
-    const isProposalPage = pathname.startsWith('/proposal')
+export async function Navigation() {
+    const { userId } = await auth();
+    const pathname = headers().get("next-url") || "";
+    const isProposalPage = pathname.startsWith("/proposal");
 
     if (isProposalPage) {
         return null;
@@ -27,13 +27,14 @@ export function Navigation() {
                     </Link>
 
                     <div className="flex items-center gap-4">
-                        {isSignedIn ? (
+                        {userId ? (
                             <>
                                 <Link href="/dashboard">
                                     <Button variant="ghost" className="text-red-500 hover:text-red-600">
                                         My Cards
                                     </Button>
                                 </Link>
+                                {/* Client-side UserButton needs a wrapper */}
                                 <UserButton
                                     afterSignOutUrl="/"
                                     appearance={{
@@ -61,4 +62,4 @@ export function Navigation() {
             </div>
         </nav>
     );
-} 
+}
