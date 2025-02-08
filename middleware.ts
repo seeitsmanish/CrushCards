@@ -5,11 +5,14 @@ const isPublicRoute = createRouteMatcher(['/', '/proposal(.*)', '/api/page(.*)',
 
 export default clerkMiddleware(async (auth, request) => {
     const { userId } = await auth()
+    const headers = new Headers(request.headers);
+    headers.set("x-current-path", request.nextUrl.pathname);
     if (!isPublicRoute(request)) {
         if (!userId) {
             return NextResponse.redirect(new URL('/', request.url))
         }
     }
+    return NextResponse.next({ headers });
 })
 
 export const config = {

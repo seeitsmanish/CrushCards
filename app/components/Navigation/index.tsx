@@ -8,7 +8,8 @@ import { SignInButton, UserButton } from "@clerk/nextjs";
 
 export async function Navigation() {
     const { userId } = await auth();
-    const pathname = headers().get("next-url") || "";
+    const headerList = headers();
+    const pathname = headerList.get("x-current-path") || "";
     const isProposalPage = pathname.startsWith("/proposal");
 
     if (isProposalPage) {
