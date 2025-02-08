@@ -1,13 +1,8 @@
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { URL } from "url";
 
 export async function GET(req: Request) {
-    const { userId } = await auth();
-    if (!userId) {
-        return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
-    }
 
     // Extract `unique_slug` from query parameters
     const url = new URL(req.url);
