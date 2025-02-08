@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Heart, Sparkles, Share2, PenTool } from "lucide-react";
 import Link from "next/link";
 import { motion } from 'framer-motion';
+import { SignInButton, useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
+
 
 const FeatureCard = ({ icon: Icon, title, description }: {
     icon: any;
@@ -48,6 +51,11 @@ const features = [
 // clientAnimation.tsx
 
 export function AnimatedContent() {
+
+    const { isSignedIn } = useUser();
+    const router = useRouter();
+
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -95,15 +103,32 @@ export function AnimatedContent() {
                 transition={{ delay: 0.6 }}
                 className="mt-12"
             >
-                <Link href="/select-card">
-                    <Button
-                        size="lg"
-                        className="group bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-10 py-7 text-lg rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl"
-                    >
-                        <Sparkles className="mr-2 h-5 w-5 group-hover:animate-spin" />
-                        Create Your Proposal
-                    </Button>
-                </Link>
+                {
+                    isSignedIn ? (
+                        <Button
+                            onClick={() => {
+                                router.push('/select-card');
+                            }}
+                            size="lg"
+                            className="group bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-10 py-7 text-lg rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl"
+                        >
+                            <Sparkles className="mr-2 h-5 w-5 group-hover:animate-spin" />
+                            Create Your Proposal
+                        </Button>
+                    ) : (
+                        <SignInButton mode="modal">
+                            <Button
+                                size="lg"
+                                className="group bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white px-10 py-7 text-lg rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl"
+                            >
+                                <Sparkles className="mr-2 h-5 w-5 group-hover:animate-spin" />
+                                Create Your Proposal
+                            </Button>
+                        </SignInButton>
+                    )
+
+                }
+
             </motion.div>
 
             {/* Features grid */}
